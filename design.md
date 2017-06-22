@@ -17,3 +17,6 @@
  * 删除提醒
  * 从文件读数据
  
+### 参考链接
+系统事件：http://blog.csdn.net/w250shini11/article/details/16983177
+闹钟：http://www.cnblogs.com/mengdd/p/3819806.html
