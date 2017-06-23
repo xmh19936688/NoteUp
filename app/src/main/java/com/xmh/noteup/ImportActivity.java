@@ -38,16 +38,21 @@ public class ImportActivity extends AppCompatActivity {
                 File file = new File(filePath);
                 list = getInfoFromFile(file);
 
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (list.size() > 0) {
+                if (list.size() > 0) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
                             SharedPreferences preferences = getPreferences(MODE_PRIVATE);
                             SharedPreferences.Editor edit = preferences.edit();
                             edit.putString(TAG_CSV_FILE_PATH, filePath);
+
+                            for (Pair<String, Date> p : list) {
+
+                            }
+
                         }
-                    }
-                });
+                    });
+                }
 
             }
         }).start();
