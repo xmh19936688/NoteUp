@@ -11,7 +11,9 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class ImportActivity extends AppCompatActivity {
@@ -23,16 +25,18 @@ public class ImportActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         File file = new File(intent.getData().getPath());
-        List<Pair<String,String>> list=new ArrayList<>();
+        List<Pair<String, Date>> list = new ArrayList<>();
+        SimpleDateFormat dateFormater = new SimpleDateFormat("yyyy/M/d");
         try {
-            BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(file),"gb2312"));
+            BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(file), "gb2312"));
             String line = "";
-            while((line = reader.readLine())!=null){
-                if (line.split(",").length==27){
-                    String name=line.split(",")[1];
-                    String date=line.split(",")[20];
-                    if(!StringUtil.isEmpty(name)&& !StringUtil.isEmpty(date)){
-                        list.add(new Pair(name,date));
+            while ((line = reader.readLine()) != null) {
+                if (line.split(",").length == 27) {
+                    String name = line.split(",")[1];
+                    String d = line.split(",")[20];
+                    if (!StringUtil.isEmpty(name) && !StringUtil.isEmpty(d)) {
+                        Date date = dateFormater.parse(d);
+                        list.add(new Pair(name, date));
                     }
                 }
             }
