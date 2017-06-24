@@ -1,11 +1,14 @@
 package com.xmh.noteup;
 
 import android.content.Context;
+import android.os.SystemClock;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
+import java.util.Date;
 
 import static org.junit.Assert.*;
 
@@ -22,5 +25,12 @@ public class ExampleInstrumentedTest {
         Context appContext = InstrumentationRegistry.getTargetContext();
 
         assertEquals("com.xmh.noteup", appContext.getPackageName());
+    }
+
+    @Test
+    public void test(){
+        new Date().getTime();
+        SystemClock.elapsedRealtime();
+
     }
 }
