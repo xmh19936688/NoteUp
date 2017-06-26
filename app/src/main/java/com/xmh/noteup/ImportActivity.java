@@ -1,28 +1,29 @@
 package com.xmh.noteup;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.util.Pair;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 
-import com.xmh.noteup.utils.StringUtil;
+import com.xmh.noteup.utils.DataUtil;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStreamReader;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+
 public class ImportActivity extends AppCompatActivity {
 
-    private static final String TAG_CSV_FILE_PATH = "path";
 
-    private String filePath = "";
+    private RecyclerView rvList;
     private List<Pair<String, Date>> list = new ArrayList<>();
+    private String filePath = "";
+    private ProgressDialog dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,24 +33,30 @@ public class ImportActivity extends AppCompatActivity {
         Intent intent = getIntent();
         filePath = intent.getData().getPath();
 
+        dialog = new ProgressDialog(this);
+        dialog.setTitle("正在处理");
+        dialog.setCancelable(false);
+        dialog.show();
+
         new Thread(new Runnable() {
             @Override
             public void run() {
                 File file = new File(filePath);
-                list = getInfoFromFile(file);
+                list = DataUtil.getInfoFromFile(file);
+                list = DataUtil.sortByDate(list);
 
                 if (list.size() > 0) {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            SharedPreferences preferences = getPreferences(MODE_PRIVATE);
+                            dialog.dismiss();
+                            initView();
+                            SharedPreferences preferences = getSharedPreferences(App.PREFRENCE_NAME, MODE_PRIVATE);
                             SharedPreferences.Editor edit = preferences.edit();
-                            edit.putString(TAG_CSV_FILE_PATH, filePath);
+                            edit.putString(App.DATA_FILE_PATH, filePath);
+                            edit.commit();
 
-                            for (Pair<String, Date> p : list) {
-
-                            }
-
+                            MainService.start(ImportActivity.this);
                         }
                     });
                 }
@@ -58,36 +65,11 @@ public class ImportActivity extends AppCompatActivity {
         }).start();
     }
 
-    private List<Pair<String, Date>> getInfoFromFile(File file) {
-        List<Pair<String, Date>> list = new ArrayList<>();
-        SimpleDateFormat dateFormater = new SimpleDateFormat("yyyy/M/d");
-
-        BufferedReader reader = null;
-        try {
-            reader = new BufferedReader(new InputStreamReader(new FileInputStream(file), "gb2312"));
-            String line = "";
-            while ((line = reader.readLine()) != null) {
-                if (line.split(",").length == 27) {
-                    String name = line.split(",")[1];
-                    String d = line.split(",")[20];
-                    if (!StringUtil.isEmpty(name) && !StringUtil.isEmpty(d)) {
-                        Date date = dateFormater.parse(d);
-                        list.add(new Pair(name, date));
-                    }
-                }
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            if (reader != null) {
-                try {
-                    reader.close();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-        return list;
+    private void initView() {
+        rvList = (RecyclerView) findViewById(R.id.list);
+        Adapter adapter = new Adapter();
+        adapter.setData(list);
+        rvList.setAdapter(adapter);
+        rvList.setLayoutManager(new LinearLayoutManager(this));
     }
 }

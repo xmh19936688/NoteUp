@@ -14,20 +14,21 @@ import java.util.Date;
 
 public class App extends Application {
 
+    public static final String PREFRENCE_NAME = "NoteupPreference";
+    public static final String DATA_FILE_PATH = "DataFilePath";
+
+
     @Override
     public void onCreate() {
         super.onCreate();
 
-        // will always start new activity
-        alarm2();
+        initAlarm();
 
     }
 
-    private void alarm2() {
-        Intent intent = new Intent(this, MainActivity.class);
-        intent.setAction(Intent.ACTION_MAIN);
-        intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0x1, intent, 0);
+    private void initAlarm() {
+        Intent intent = new Intent(this, MainService.class);
+        PendingIntent pendingIntent = PendingIntent.getService(this, 0x1, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         int delay = 5 * 1000;
 //        int delay = 24 * 60 * 60 * 1000;
