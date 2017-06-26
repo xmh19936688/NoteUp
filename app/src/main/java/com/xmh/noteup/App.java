@@ -30,8 +30,8 @@ public class App extends Application {
         Intent intent = new Intent(this, MainService.class);
         PendingIntent pendingIntent = PendingIntent.getService(this, 0x1, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        int delay = 5 * 1000;
-//        int delay = 24 * 60 * 60 * 1000;
+//        int delay = 5 * 1000;
+        int delay = 24 * 60 * 60 * 1000;
         Date tomorrow = new Date();
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(tomorrow);
@@ -44,7 +44,7 @@ public class App extends Application {
 
 
         AlarmManager manager = (AlarmManager) getSystemService(ALARM_SERVICE);
-        manager.setRepeating(AlarmManager.RTC, System.currentTimeMillis() + 5 * 1000, delay, pendingIntent);
-//        manager.setRepeating(AlarmManager.ELAPSED_REALTIME, tomorrow.getTime(), delay, pendingIntent);
+//        manager.setRepeating(AlarmManager.RTC, System.currentTimeMillis() + 5 * 1000, delay, pendingIntent);
+        manager.setRepeating(AlarmManager.ELAPSED_REALTIME, tomorrow.getTime(), delay, pendingIntent);
     }
 }
