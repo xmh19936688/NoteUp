@@ -46,6 +46,10 @@ public class MainActivity extends AppCompatActivity {
         }
 
         File file = new File(path);
+        if (file == null || !file.exists()) {
+            return;
+        }
+
         listAll = DataUtil.getInfoFromFile(file);
         listAll = DataUtil.sortByDate(listAll);
         for (Pair<String, Date> p : listAll) {
