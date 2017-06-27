@@ -5,9 +5,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v4.util.Pair;
-import android.util.Log;
 
 import com.xmh.noteup.utils.DataUtil;
+import com.xmh.noteup.utils.LogUtil;
 import com.xmh.noteup.utils.StringUtil;
 
 import java.io.File;
@@ -27,7 +27,7 @@ public class MainService extends IntentService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
-        Log.e("xmh", "run");
+        LogUtil.e("xmh", "run", true);
 
         SharedPreferences preferences = getSharedPreferences(App.PREFRENCE_NAME, MODE_PRIVATE);
         String path = preferences.getString(App.DATA_FILE_PATH, "");
@@ -40,6 +40,8 @@ public class MainService extends IntentService {
         if (list == null || list.isEmpty()) {
             return;
         }
+
+        LogUtil.e("xmh", "size:" + list.size(), true);
 
         for (Pair<String, Date> p : list) {
         }
