@@ -1,5 +1,6 @@
 package com.xmh.noteup.utils;
 
+import android.support.compat.BuildConfig;
 import android.util.Log;
 
 import java.io.File;
@@ -14,7 +15,7 @@ import java.util.Date;
 public class LogUtil {
     public static void e(String tag, String msg, boolean toFile) {
         Log.e(tag, msg);
-        if (!toFile) {
+        if (!toFile || !BuildConfig.DEBUG) {
             return;
         }
         String logFilePath = FileUtil.getLogFilePath();

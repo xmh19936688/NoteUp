@@ -44,7 +44,7 @@ public class App extends Application {
 
 
         AlarmManager manager = (AlarmManager) getSystemService(ALARM_SERVICE);
-//        manager.setRepeating(AlarmManager.RTC, System.currentTimeMillis() + 5 * 1000, delay, pendingIntent);
-        manager.setRepeating(AlarmManager.RTC, tomorrow.getTime(), delay, pendingIntent);
+//        manager.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 5 * 1000, delay, pendingIntent);
+        manager.setRepeating(AlarmManager.RTC_WAKEUP, tomorrow.getTime(), delay, pendingIntent);
     }
 }
