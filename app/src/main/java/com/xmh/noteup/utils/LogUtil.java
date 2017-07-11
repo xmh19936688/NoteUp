@@ -1,7 +1,8 @@
 package com.xmh.noteup.utils;
 
-import android.support.compat.BuildConfig;
 import android.util.Log;
+
+import com.xmh.noteup.BuildConfig;
 
 import java.io.File;
 import java.io.FileWriter;
