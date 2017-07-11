@@ -1,13 +1,19 @@
 package com.xmh.noteup;
 
 import android.app.IntentService;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.PowerManager;
+import android.support.v4.app.NotificationCompat;
 import android.support.v4.util.Pair;
+import android.widget.RemoteViews;
 
 import com.xmh.noteup.utils.DataUtil;
+import com.xmh.noteup.utils.DateUtil;
 import com.xmh.noteup.utils.LogUtil;
 import com.xmh.noteup.utils.StringUtil;
 
@@ -48,8 +54,31 @@ public class MainService extends IntentService {
 
         LogUtil.e("xmh", "size:" + list.size(), true);
 
+        int today = 0, week = 0;
         for (Pair<String, Date> p : list) {
+            if (DateUtil.isToday(p.second)) {
+                today++;
+            } else if (DateUtil.inWeek(p.second)) {
+                week++;
+            }
         }
+
+        RemoteViews view = new RemoteViews(getPackageName(), R.layout.layout_notify);
+        view.setTextViewText(R.id.tv_today, String.valueOf(today));
+        view.setTextViewText(R.id.tv_week, String.valueOf(week));
+
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0x1, new Intent(this, MainActivity.class), PendingIntent.FLAG_UPDATE_CURRENT);
+
+        Notification notification = new NotificationCompat.Builder(this)
+                .setContent(view)
+                .setSmallIcon(R.mipmap.ic_launcher)
+                .setTicker("生日提醒")
+                .setContentIntent(pendingIntent)
+                .setAutoCancel(true)
+                .build();
+
+        NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        manager.notify(App.NOTIFY_ID, notification);
 
         lock.release();
     }

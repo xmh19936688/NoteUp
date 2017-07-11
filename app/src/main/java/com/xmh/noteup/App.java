@@ -17,6 +17,8 @@ public class App extends Application {
     public static final String PREFRENCE_NAME = "NoteupPreference";
     public static final String DATA_FILE_PATH = "DataFilePath";
 
+    public static final int NOTIFY_ID = 0x1;
+
 
     @Override
     public void onCreate() {
@@ -30,7 +32,7 @@ public class App extends Application {
         Intent intent = new Intent(this, MainService.class);
         PendingIntent pendingIntent = PendingIntent.getService(this, 0x1, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-//        int delay = 5 * 1000;
+//        int delay = 60 * 60 * 1000;
         int delay = 24 * 60 * 60 * 1000;
         Date tomorrow = new Date();
         Calendar calendar = Calendar.getInstance();
@@ -44,7 +46,7 @@ public class App extends Application {
 
 
         AlarmManager manager = (AlarmManager) getSystemService(ALARM_SERVICE);
-//        manager.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 5 * 1000, delay, pendingIntent);
+//        manager.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), delay, pendingIntent);
         manager.setRepeating(AlarmManager.RTC_WAKEUP, tomorrow.getTime(), delay, pendingIntent);
     }
 }

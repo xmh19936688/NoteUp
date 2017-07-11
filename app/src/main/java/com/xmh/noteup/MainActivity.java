@@ -22,6 +22,9 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView rvListToday;
     private RecyclerView rvListWeek;
     private RecyclerView rvListAll;
+    private Adapter adapterToday = new Adapter();
+    private Adapter adapterWeek = new Adapter();
+    private Adapter adapterAll = new Adapter();
     private List<Pair<String, Date>> listToday = new ArrayList<>();
     private List<Pair<String, Date>> listWeek = new ArrayList<>();
     private List<Pair<String, Date>> listAll = new ArrayList<>();
@@ -34,8 +37,13 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        initData();
         initView();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        initData();
     }
 
     private void initData() {
@@ -58,8 +66,11 @@ public class MainActivity extends AppCompatActivity {
             } else if (DateUtil.inWeek(p.second)) {
                 listWeek.add(p);
             }
-
         }
+
+        adapterToday.setData(listToday);
+        adapterWeek.setData(listWeek);
+        adapterAll.setData(listAll);
     }
 
     private void initView() {
@@ -70,10 +81,6 @@ public class MainActivity extends AppCompatActivity {
         rvListToday = (RecyclerView) findViewById(R.id.list_today);
         rvListWeek = (RecyclerView) findViewById(R.id.list_week);
         rvListAll = (RecyclerView) findViewById(R.id.list_all);
-
-        Adapter adapterToday = new Adapter();
-        Adapter adapterWeek = new Adapter();
-        Adapter adapterAll = new Adapter();
 
         adapterToday.setData(listToday);
         adapterWeek.setData(listWeek);
