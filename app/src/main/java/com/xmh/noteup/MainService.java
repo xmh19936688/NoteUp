@@ -4,6 +4,7 @@ import android.app.IntentService;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.PowerManager;
 import android.support.v4.util.Pair;
 
 import com.xmh.noteup.utils.DataUtil;
@@ -27,6 +28,10 @@ public class MainService extends IntentService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
+        PowerManager powerManager = (PowerManager) getSystemService(Context.POWER_SERVICE);
+        PowerManager.WakeLock lock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "lock");
+        lock.acquire();
+
         LogUtil.e("xmh", "run", true);
 
         SharedPreferences preferences = getSharedPreferences(App.PREFRENCE_NAME, MODE_PRIVATE);
@@ -45,6 +50,8 @@ public class MainService extends IntentService {
 
         for (Pair<String, Date> p : list) {
         }
+
+        lock.release();
     }
 
     @Override
