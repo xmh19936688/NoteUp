@@ -8,6 +8,7 @@ import android.support.v4.util.Pair;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.widget.Toast;
 
 import com.xmh.noteup.utils.DataUtil;
 
@@ -45,11 +46,11 @@ public class ImportActivity extends AppCompatActivity {
                 list = DataUtil.getInfoFromFile(file);
                 list = DataUtil.sortByDate(list);
 
-                if (list.size() > 0) {
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            dialog.dismiss();
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        dialog.dismiss();
+                        if (list.size() > 0) {
                             initView();
                             SharedPreferences preferences = getSharedPreferences(App.PREFRENCE_NAME, MODE_PRIVATE);
                             SharedPreferences.Editor edit = preferences.edit();
@@ -57,9 +58,11 @@ public class ImportActivity extends AppCompatActivity {
                             edit.commit();
 
                             MainService.start(ImportActivity.this);
+                        } else {
+                            Toast.makeText(ImportActivity.this, "未解析到数据", Toast.LENGTH_LONG).show();
                         }
-                    });
-                }
+                    }
+                });
 
             }
         }).start();

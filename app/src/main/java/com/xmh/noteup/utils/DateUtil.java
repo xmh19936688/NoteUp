@@ -1,5 +1,6 @@
 package com.xmh.noteup.utils;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -8,6 +9,8 @@ import java.util.Date;
  */
 
 public class DateUtil {
+
+    private static String LastDateFormat = "yyyy年M月d";
 
     public static boolean isToday(Date date) {
 
@@ -47,5 +50,57 @@ public class DateUtil {
         other.set(Calendar.YEAR, today.get(Calendar.YEAR));
 
         return 0 > today.compareTo(other) && 0 < week.compareTo(other);
+    }
+
+    public static Date format(String s) {
+        try {
+            SimpleDateFormat formater = new SimpleDateFormat(LastDateFormat);
+            Date date = formater.parse(s);
+            return date;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        try {
+            SimpleDateFormat formater = new SimpleDateFormat("yyyy/M/d");
+            Date date = formater.parse(s);
+            LastDateFormat = "yyyy/M/d";
+            return date;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        try {
+            SimpleDateFormat formater = new SimpleDateFormat("yyyy-M-d");
+            Date date = formater.parse(s);
+            LastDateFormat = "yyyy-M-d";
+            return date;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        try {
+            SimpleDateFormat formater = new SimpleDateFormat("yyyy.M.d");
+            Date date = formater.parse(s);
+            LastDateFormat = "yyyy.M.d";
+            return date;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        try {
+            SimpleDateFormat formater = new SimpleDateFormat("yyyy年M月d日");
+            Date date = formater.parse(s);
+            LastDateFormat = "yyyy年M月d日";
+            return date;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        try {
+            SimpleDateFormat formater = new SimpleDateFormat("yyyy年M月d");
+            LastDateFormat = "yyyy年M月d";
+            Date date = formater.parse(s);
+            return date;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return null;
     }
 }

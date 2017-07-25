@@ -6,7 +6,6 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -22,19 +21,34 @@ public class DataUtil {
 
     public static List<Pair<String, Date>> getInfoFromFile(File file) {
         List<Pair<String, Date>> list = new ArrayList<>();
-        SimpleDateFormat dateFormater = new SimpleDateFormat("yyyy/M/d");
 
         BufferedReader reader = null;
         try {
             reader = new BufferedReader(new InputStreamReader(new FileInputStream(file), "gb2312"));
-            String line = "";
+            String line;
+            int namePosition = -1;
+            int birthdayPosition = -1;
             while ((line = reader.readLine()) != null) {
-                if (line.split(",").length == 27) {
-                    String name = line.split(",")[1];
-                    String d = line.split(",")[20];
+                if (namePosition == -1) {
+                    if (line.contains("姓") && line.contains("名") && line.contains("出生日期")) {
+                        for (int i = 0; i < line.split(",").length; i++) {
+                            if (line.split(",")[i].contains("姓") && line.split(",")[i].contains("名")) {
+                                namePosition = i;
+                            }
+                            if (line.split(",")[i].equals("出生日期")) {
+                                birthdayPosition = i;
+                            }
+                            if (namePosition > -1 && birthdayPosition > -1) {
+                                break;
+                            }
+                        }
+                    }
+                } else if (line.split(",").length > namePosition && line.split(",").length > birthdayPosition) {
+                    String name = line.split(",")[namePosition];
+                    String d = line.split(",")[birthdayPosition];
                     if (!StringUtil.isEmpty(name) && !StringUtil.isEmpty(d)) {
-                        Date date = dateFormater.parse(d);
-                        list.add(new Pair(name, date));
+                        Date date = DateUtil.format(d);
+                        if (date != null) list.add(new Pair<>(name, date));
                     }
                 }
             }

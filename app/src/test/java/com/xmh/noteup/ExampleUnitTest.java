@@ -7,7 +7,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.concurrent.CancellationException;
 
 import static org.junit.Assert.assertEquals;
 
@@ -40,7 +39,7 @@ public class ExampleUnitTest {
     }
 
     @Test
-    public void testDate(){
+    public void testDate() {
         Date date = new Date();
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
@@ -54,6 +53,20 @@ public class ExampleUnitTest {
         calendar.get(Calendar.SECOND);
         calendar.get(Calendar.MILLISECOND);
 
+    }
+
+    @Test
+    public void testFormat() {
+        try {
+            SimpleDateFormat dateFormater = new SimpleDateFormat("yyyy/M/d");
+            Date a = dateFormater.parse("1991/1/1");
+            Date b = dateFormater.parse("1991-1-1");
+            Date c = dateFormater.parse("1991年1月1日");
+            Date d = dateFormater.parse("1991.1.1");
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 
